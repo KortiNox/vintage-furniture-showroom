@@ -6,10 +6,10 @@ export const CustomizationProvider = (props) => {
   const [outerMaterial, setOuterMaterial] = useState('Oak');
   const [innerMaterial, setInnerMaterial] = useState('White');
   const [handlesMaterial, setHandlesMaterial] = useState('White');
-  const [isDoorOpen, setIsDoorOpen] = useState(false);
-  const [doorSize, setDoorSize] = useState('m');
+
   const [armchairSize, setArmchairSize] = useState('m');
   const [armchairMaterial, setArmchairMaterial] = useState('Oak'); // Добавляем материал кресла
+  const [armchairBackMaterial, setArmchairBackMaterial] = useState('Black');
 
   return (
     <CustomizationContext.Provider
@@ -20,14 +20,13 @@ export const CustomizationProvider = (props) => {
         setInnerMaterial,
         handlesMaterial,
         setHandlesMaterial,
-        isDoorOpen,
-        setIsDoorOpen,
-        doorSize,
-        setDoorSize,
+
         armchairSize,
         setArmchairSize,
         armchairMaterial, // Добавляем в контекст
         setArmchairMaterial, // Добавляем в контекст
+        armchairBackMaterial,
+        setArmchairBackMaterial,
       }}
     >
       {props.children}

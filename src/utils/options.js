@@ -15,7 +15,6 @@ export const bodyMaterialOptions = [
     label: 'Pine',
     imgIcon: './woodIcon.png',
   },
-  ,
 ];
 
 export const innerMaterialOptions = [
@@ -43,6 +42,7 @@ export const handlesMaterialOptions = [
     imgIcon: './blackIcon.png',
   },
 ];
+
 export const sizeOptions = [
   { value: 'xs', label: 'XS' },
   { value: 's', label: 'S' },
@@ -64,4 +64,13 @@ export const armchairBodyMaterialOptions = [
   { value: 'Teak', label: 'Teak' },
   { value: 'Mahogany', label: 'Mahogany' },
   { value: 'Pine', label: 'Pine' },
+];
+
+// Добавляем опции для материала спинки кресла
+export const armchairBackMaterialOptions = [
+  { value: 'Black', label: 'Black' },
+  { value: 'White', label: 'White' },
+  { value: 'Gray', label: 'Gray' },
+  { value: 'Brown', label: 'Brown' },
+  { value: 'Beige', label: 'Beige' },
 ];

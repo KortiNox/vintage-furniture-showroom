@@ -1,5 +1,4 @@
 import React, { Suspense, useEffect, useState, lazy } from 'react';
-
 import Slot from './components/Slot';
 import SelectOptions from './components/SelectOptions';
 import { useCustomization } from './context/Customization';
@@ -10,6 +9,7 @@ import {
   sizeOptions,
   armchairSizeOptions,
   armchairBodyMaterialOptions,
+  armchairBackMaterialOptions, // Добавляем импорт
 } from './utils/options';
 
 // 3d components
@@ -24,14 +24,13 @@ const App = () => {
     setInnerMaterial,
     handlesMaterial,
     setHandlesMaterial,
-    isDoorOpen,
-    setIsDoorOpen,
-    doorSize,
-    setDoorSize,
+
     armchairSize,
     setArmchairSize,
-    armchairMaterial, // Добавляем материал кресла
-    setArmchairMaterial, // Добавляем материал кресла
+    armchairMaterial,
+    setArmchairMaterial,
+    armchairBackMaterial, // Добавляем из контекста
+    setArmchairBackMaterial, // Добавляем из контекста
   } = useCustomization();
 
   //------------ outer body Material -------------
@@ -45,9 +44,6 @@ const App = () => {
   };
 
   //------------------- Interior-------------
-  const handleDoorOpen = () => {
-    setIsDoorOpen(!isDoorOpen);
-  };
 
   const handleInnerMaterial = (option) => {
     setInnerMaterial(option.label);
@@ -63,10 +59,6 @@ const App = () => {
   const [sizeSlot, setSizeSlot] = useState(true);
   const toggleSizeSlot = () => {
     setSizeSlot(!sizeSlot);
-  };
-
-  const handleSizeChange = (option) => {
-    setDoorSize(option.value);
   };
 
   //----------- Armchair Size selection -----------------
@@ -89,6 +81,16 @@ const App = () => {
     setArmchairMaterial(option.label);
   };
 
+  //----------- Armchair Back Material selection -----------------
+  const [armchairBackMaterialSlot, setArmchairBackMaterialSlot] = useState(true);
+  const toggleArmchairBackMaterialSlot = () => {
+    setArmchairBackMaterialSlot(!armchairBackMaterialSlot);
+  };
+
+  const handleArmchairBackMaterialChange = (option) => {
+    setArmchairBackMaterial(option.label);
+  };
+
   return (
     <div className="w-full h-[100vh] flex flex-row overflow-hidden">
       <div className="w-[70%] rad-gradient">
@@ -98,15 +100,6 @@ const App = () => {
       </div>
 
       <div className="controls w-[30%]">
-        {/* Размер двери */}
-        <Slot label={'Door Size'} isOpen={sizeSlot} onChange={toggleSizeSlot}>
-          <SelectOptions
-            options={sizeOptions}
-            value={doorSize}
-            onChange={handleSizeChange}
-          ></SelectOptions>
-        </Slot>
-
         {/* Размер кресла */}
         <Slot label={'Armchair Size'} isOpen={armchairSizeSlot} onChange={toggleArmchairSizeSlot}>
           <SelectOptions
@@ -116,28 +109,33 @@ const App = () => {
           ></SelectOptions>
         </Slot>
 
-        {/* Материал кресла */}
+        {/* Материал ножек кресла */}
         <Slot
-          label={'Armchair Material'}
+          label={'Armchair Legs Material'}
           isOpen={armchairMaterialSlot}
           onChange={toggleArmchairMaterialSlot}
         >
           <SelectOptions
-            options={armchairBodyMaterialOptions} // Используем те же опции что и для двери
+            options={armchairBodyMaterialOptions}
             value={armchairMaterial}
             onChange={handleArmchairMaterialChange}
           ></SelectOptions>
         </Slot>
 
-        <Slot label={'Door Material'} isOpen={isBodySlotOpen} onChange={handleBodySlot}>
+        {/* Материал спинки кресла */}
+        <Slot
+          label={'Armchair Back Material'}
+          isOpen={armchairBackMaterialSlot}
+          onChange={toggleArmchairBackMaterialSlot}
+        >
           <SelectOptions
-            options={bodyMaterialOptions}
-            value={outerMaterial}
-            onChange={handleBodyMaterialChange}
+            options={armchairBackMaterialOptions}
+            value={armchairBackMaterial}
+            onChange={handleArmchairBackMaterialChange}
           ></SelectOptions>
         </Slot>
 
-        <Slot label={'Inner Lamination'} isOpen={isDoorOpen} onChange={handleDoorOpen}>
+        <Slot label={'Inner Lamination'}>
           <SelectOptions
             options={innerMaterialOptions}
             value={innerMaterial}
