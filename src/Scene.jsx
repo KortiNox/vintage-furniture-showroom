@@ -1,11 +1,16 @@
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls, ContactShadows } from '@react-three/drei';
-import { Model2 } from './Model2';
 import { Armchair } from './Armchair';
+import { LampModel } from './Lamp';
+import { Table1Model } from './Table1';
+import { Table2Model } from './Table2';
+import { Table3Model } from './Table3';
+
+
 
 function Scene() {
   return (
-    <Canvas shadows camera={{ position: [5, 5, 45], fov: 85 }}>
+    <Canvas shadows camera={{ position: [5, 5, 15], fov: 85 }}>
       {/* Environment как фон */}
       <Environment
         files="/textures/old_hall_1k.exr"
@@ -49,6 +54,15 @@ function Scene() {
         shadow-mapSize-height={1024}
       />
 
+            {/* ЗАПОЛНЯЮЩИЙ СВЕТ СЗАДИ - Directional Light */}
+            <directionalLight
+        position={[-5, 5, -10]} // Позиция сзади и слева
+        intensity={5.3} // Низкая интенсивность для мягкого заполнения
+        color="e8d930" // Легкий голубой оттенок для атмосферности
+        castShadow={false} // Обычно заполняющий свет не отбрасывает тени
+      />
+
+
       {/* Тени */}
       <ContactShadows
         resolution={1024}
@@ -72,9 +86,13 @@ function Scene() {
         maxDistance={50}
       />
 
-      {/* Модель двери - убрали дублирующие трансформации */}
+      
       {/* <Model2 castShadow receiveShadow /> */}
       <Armchair castShadow receiveShadow />
+      <LampModel castShadow receiveShadow/> 
+      <Table1Model castShadow receiveShadow /> 
+      <Table2Model/>
+      <Table3Model/>
       {/* Пол */}
       {/* Статичный пол */}
     </Canvas>

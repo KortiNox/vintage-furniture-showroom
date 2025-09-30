@@ -1,35 +1,33 @@
-import { createContext, useContext, useState } from 'react';
+// context/Customization.js
+import React, { createContext, useContext, useState } from 'react';
 
 const CustomizationContext = createContext({});
 
-export const CustomizationProvider = (props) => {
-  const [outerMaterial, setOuterMaterial] = useState('Oak');
-  const [innerMaterial, setInnerMaterial] = useState('White');
-  const [handlesMaterial, setHandlesMaterial] = useState('White');
-
+export const CustomizationProvider = ({ children }) => {
+  const [armchairMaterial, setArmchairMaterial] = useState('Oak');
   const [armchairSize, setArmchairSize] = useState('m');
-  const [armchairMaterial, setArmchairMaterial] = useState('Oak'); // Добавляем материал кресла
   const [armchairBackMaterial, setArmchairBackMaterial] = useState('Black');
+
+  // Добавляем состояние для выбранной модели
+  const [selectedModel, setSelectedModel] = useState(null);
 
   return (
     <CustomizationContext.Provider
       value={{
-        outerMaterial,
-        setOuterMaterial,
-        innerMaterial,
-        setInnerMaterial,
-        handlesMaterial,
-        setHandlesMaterial,
-
+        // Существующие состояния
+        armchairMaterial,
+        setArmchairMaterial,
         armchairSize,
         setArmchairSize,
-        armchairMaterial, // Добавляем в контекст
-        setArmchairMaterial, // Добавляем в контекст
         armchairBackMaterial,
         setArmchairBackMaterial,
+
+        // Новое состояние для выбранной модели
+        selectedModel,
+        setSelectedModel,
       }}
     >
-      {props.children}
+      {children}
     </CustomizationContext.Provider>
   );
 };
