@@ -6,8 +6,6 @@ import { Table1Model } from './Table1';
 import { Table2Model } from './Table2';
 import { Table3Model } from './Table3';
 
-
-
 function Scene() {
   return (
     <Canvas shadows camera={{ position: [5, 5, 15], fov: 85 }}>
@@ -29,20 +27,24 @@ function Scene() {
       />
 
       {/* Освещение */}
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.3} />
 
+      {/* ОСНОВНОЙ НАПРАВЛЕННЫЙ СВЕТ - главный для теней */}
       <directionalLight
         position={[5, 10, 5]}
-        intensity={1.2}
+        intensity={2}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-far={20}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
+        shadow-mapSize-width={4096}
+        shadow-mapSize-height={4096}
+        shadow-camera-far={50}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
+        shadow-bias={-0.0001} // Помогает убрать артефакты теней
       />
+
+      {/* Дополнительный направленный свет */}
 
       <spotLight
         position={[0, 10, 0]}
@@ -54,24 +56,46 @@ function Scene() {
         shadow-mapSize-height={1024}
       />
 
-            {/* ЗАПОЛНЯЮЩИЙ СВЕТ СЗАДИ - Directional Light */}
-            <directionalLight
-        position={[-5, 5, -10]} // Позиция сзади и слева
-        intensity={5.3} // Низкая интенсивность для мягкого заполнения
-        color="e8d930" // Легкий голубой оттенок для атмосферности
-        castShadow={false} // Обычно заполняющий свет не отбрасывает тени
+      {/* ЗАПОЛНЯЮЩИЙ СВЕТ СЗАДИ */}
+      <directionalLight
+        position={[-5, 5, -10]}
+        intensity={0.1}
+        color="#e8d930"
+        castShadow={false}
       />
 
+      {/* ОСНОВНАЯ ПЛОСКОСТЬ ДЛЯ ТЕНЕЙ С SHADOW MATERIAL */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
+        <planeGeometry args={[40, 40]} />
+        <shadowMaterial opacity={0.1} transparent color="#000000" />
+      </mesh>
 
-      {/* Тени */}
+      {/* ДЕКОРАТИВНЫЙ ПОЛ (опционально, для лучшего визуала) */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.001, 0]} // Чуть ниже плоскости теней
+        receiveShadow
+      >
+        <planeGeometry args={[40, 40]} />
+        <meshStandardMaterial
+          color="#1a1a1a"
+          roughness={0.9}
+          metalness={0.1}
+          transparent
+          opacity={0.1}
+        />
+      </mesh>
+
+      {/* ДОПОЛНИТЕЛЬНЫЕ КОНТАКТНЫЕ ТЕНИ для мягкости */}
       <ContactShadows
         resolution={1024}
-        position={[0, -0.8, 0]}
-        opacity={0.5}
-        scale={15}
-        blur={1.5}
-        far={1}
-        color="#202020"
+        position={[0, -0.99, 0]}
+        opacity={0.2}
+        scale={20}
+        blur={2}
+        far={1.5}
+        color="#000000"
+        т
       />
 
       {/* Элементы управления */}
@@ -86,15 +110,12 @@ function Scene() {
         maxDistance={50}
       />
 
-      
-      {/* <Model2 castShadow receiveShadow /> */}
+      {/* Модели с тенями - УБЕДИТЕСЬ что все имеют castShadow и receiveShadow */}
       <Armchair castShadow receiveShadow />
-      <LampModel castShadow receiveShadow/> 
-      <Table1Model castShadow receiveShadow /> 
-      <Table2Model/>
-      <Table3Model/>
-      {/* Пол */}
-      {/* Статичный пол */}
+      <LampModel castShadow receiveShadow />
+      <Table1Model castShadow receiveShadow />
+      <Table2Model castShadow receiveShadow />
+      <Table3Model castShadow receiveShadow />
     </Canvas>
   );
 }

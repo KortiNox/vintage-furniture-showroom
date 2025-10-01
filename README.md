@@ -1,4 +1,4 @@
-# 3D Furniture Configurator
+# 3D Vintage-furniture-showroom
 
 A web application for designing and visualizing furniture in 3D, built with React, React Three Fiber, and React Context API.
 
@@ -16,5 +16,3 @@ A web application for designing and visualizing furniture in 3D, built with Reac
 - **React**
 - **React Three Fiber**
 - **React Context API**
-
-

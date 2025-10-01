@@ -1,20 +1,32 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 export function LampModel(props) {
   const group = useRef();
-  
-  // Загружаем модель (поместите вашу модель в public папку)
+
+  // Загружаем модель
   const { scene } = useGLTF('./lamp.glb');
+
+  // Добавляем тени ко всем мешам модели после загрузки
+  useEffect(() => {
+    if (scene) {
+      scene.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+
+          // Опционально: улучшаем качество рендера теней для материала
+          if (child.material) {
+            child.material.needsUpdate = true;
+          }
+        }
+      });
+    }
+  }, [scene]);
 
   return (
     <group ref={group} {...props}>
-      <primitive 
-        object={scene} 
-        scale={2} // Настройте масштаб по необходимости
-        position={[0, 0, 0]} // Настройте позицию
-        rotation={[0, 0, 0]} // Настройте вращение
-      />
+      <primitive object={scene} scale={2} position={[0, 0, 0]} rotation={[0, 0, 0]} />
     </group>
   );
 }

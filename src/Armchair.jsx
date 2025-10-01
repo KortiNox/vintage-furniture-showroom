@@ -44,7 +44,7 @@ export function Armchair(props) {
         path.replace('basecolor', 'normal'),
         path.replace('basecolor', 'roughness'),
       ]),
-    [],
+    []
   );
 
   const woodTextures = useTexture(woodTexturePaths);
@@ -88,7 +88,7 @@ export function Armchair(props) {
           roughness: 0.8,
           metalness: 0.2,
         }),
-        Copper: new THREE.MeshStandardMaterial({
+      Copper: new THREE.MeshStandardMaterial({
         map: groupedTextures.Copper?.map,
         normalMap: groupedTextures.Copper.normalMap,
         roughnessMap: groupedTextures.Copper?.roughnessMap,
@@ -213,7 +213,7 @@ export function Armchair(props) {
     });
 
     // Дебаг информация в development
-    if (process.env.NODE_ENV === 'development') {
+    {
       console.log('🔄 Материалы применены:', {
         legs: { material: armchairMaterial, applied: legsApplied },
         back: { material: armchairBackMaterial, applied: backApplied },

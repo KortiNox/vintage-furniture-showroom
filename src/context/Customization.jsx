@@ -21,7 +21,6 @@ export const CustomizationProvider = ({ children }) => {
         setArmchairSize,
         armchairBackMaterial,
         setArmchairBackMaterial,
-
         // Новое состояние для выбранной модели
         selectedModel,
         setSelectedModel,
