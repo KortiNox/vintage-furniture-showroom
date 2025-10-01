@@ -1,12 +1,8 @@
 import React, { Suspense, useEffect, useState, lazy } from 'react';
-import Slot from './components/Slot';
-import SelectOptions from './components/SelectOptions';
-import { useCustomization } from './context/Customization';
-import {
-  sizeOptions,
-  armchairBodyMaterialOptions,
-  armchairBackMaterialOptions,
-} from './utils/options';
+import Slot from '@/components/ui/Slot';
+import SelectOptions from '@/components/ui/SelectOptions';
+import { useCustomization } from '@/state/customizationStore';
+import { sizeOptions, armchairBodyMaterialOptions, armchairBackMaterialOptions } from '@/config/options';
 
 // 3d components
 import LoadingAlert from './components/LoadingAlert';

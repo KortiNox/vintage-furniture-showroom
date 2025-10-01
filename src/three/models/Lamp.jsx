@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-export function Table1Model(props) {
+export function LampModel(props) {
   const group = useRef();
-  const { scene } = useGLTF('./table1.glb');
+  const { scene } = useGLTF('./lamp.glb');
 
   useEffect(() => {
     if (scene) {
@@ -11,6 +11,7 @@ export function Table1Model(props) {
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
+          if (child.material) child.material.needsUpdate = true;
         }
       });
     }
@@ -23,4 +24,6 @@ export function Table1Model(props) {
   );
 }
 
-useGLTF.preload('./table1.glb');
+useGLTF.preload('./lamp.glb');
+
+

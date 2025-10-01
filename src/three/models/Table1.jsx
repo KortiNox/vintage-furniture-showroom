@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-export function Table3Model(props) {
+export function Table1Model(props) {
   const group = useRef();
-  const { scene } = useGLTF('./table3.glb');
+  const { scene } = useGLTF('./table1.glb');
 
   useEffect(() => {
     if (scene) {
@@ -23,4 +23,6 @@ export function Table3Model(props) {
   );
 }
 
-useGLTF.preload('./table3.glb');
+useGLTF.preload('./table1.glb');
+
+

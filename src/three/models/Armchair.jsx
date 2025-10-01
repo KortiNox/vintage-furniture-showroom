@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useGLTF, useTexture } from '@react-three/drei';
-import { useCustomization } from './context/Customization';
+import { useCustomization } from '@/state/customizationStore';
 import * as THREE from 'three';
 
-// Константы для конфигурации
 const SIZE_CONFIG = {
   xs: { scale: 0.8, yPosition: 0 },
   s: { scale: 0.9, yPosition: 0 },
@@ -33,14 +32,12 @@ export function Armchair(props) {
   const [error, setError] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
 
-  // Загружаем модель
   const { nodes, materials, scene } = useGLTF('./armchair2.glb');
 
-  // Оптимизированная загрузка текстур для дерева
   const woodTexturePaths = useMemo(
     () =>
       Object.values(WOOD_TEXTURES).flatMap((path) => [
-        path, // basecolor
+        path,
         path.replace('basecolor', 'normal'),
         path.replace('basecolor', 'roughness'),
       ]),
@@ -49,7 +46,6 @@ export function Armchair(props) {
 
   const woodTextures = useTexture(woodTexturePaths);
 
-  // Группируем текстуры по материалам
   const groupedTextures = useMemo(() => {
     const textures = {};
     const woodTypes = Object.keys(WOOD_TEXTURES);
@@ -66,7 +62,6 @@ export function Armchair(props) {
     return textures;
   }, [woodTextures]);
 
-  // Настройка текстур
   useEffect(() => {
     Object.values(groupedTextures).forEach((textureGroup) => {
       Object.values(textureGroup).forEach((texture) => {
@@ -78,7 +73,6 @@ export function Armchair(props) {
     });
   }, [groupedTextures]);
 
-  // Мемоизированные материалы для ножек
   const legMaterialsConfig = useMemo(() => {
     const config = {
       Wood:
@@ -120,7 +114,6 @@ export function Armchair(props) {
     return config;
   }, [materials.chair1, groupedTextures]);
 
-  // Оптимизированное создание материалов для спинки
   const backMaterials = useMemo(() => {
     if (!materials.chair1) return {};
 
@@ -140,13 +133,9 @@ export function Armchair(props) {
     return materialsMap;
   }, [materials.chair1]);
 
-  // Обработчик клика по модели
   const handleClick = (event) => {
-    event.stopPropagation(); // Предотвращаем всплытие
-
+    event.stopPropagation();
     setIsSelected(!isSelected);
-
-    // Сообщаем контексту о выбранной модели
     if (setSelectedModel) {
       if (!isSelected) {
         setSelectedModel({
@@ -159,22 +148,16 @@ export function Armchair(props) {
             backMaterial: armchairBackMaterial,
           },
         });
-        console.log('✅ Кресло выбрано');
       } else {
         setSelectedModel(null);
-        console.log('❌ Выбор кресла сброшен');
       }
     }
   };
 
-  // Обработчик двойного клика (опционально)
   const handleDoubleClick = (event) => {
     event.stopPropagation();
-    console.log('🎯 Двойной клик по креслу');
-    // Можно добавить дополнительные действия при двойном клике
   };
 
-  // Обработчик наведения (опционально)
   const handlePointerEnter = () => {
     document.body.style.cursor = 'pointer';
   };
@@ -183,57 +166,33 @@ export function Armchair(props) {
     document.body.style.cursor = 'default';
   };
 
-  // Единый эффект для применения материалов
   useEffect(() => {
     if (!group.current || Object.keys(backMaterials).length === 0) return;
 
     const legMaterial = legMaterialsConfig[armchairMaterial] || legMaterialsConfig.Wood;
     const backMaterial = backMaterials[armchairBackMaterial] || backMaterials.Black;
 
-    let legsApplied = false;
-    let backApplied = false;
-
     group.current.traverse((child) => {
       if (child.isMesh) {
-        // Для НОЖЕК (chairlegs_low001_chair1_0001)
         if (child.name === 'chairlegs_low001_chair1_0001') {
           child.material = legMaterial;
-          legsApplied = true;
-        }
-        // Для СПИНКИ (chairlegs_low001_chair1_0)
-        else if (child.name === 'chairlegs_low001_chair1_0') {
+        } else if (child.name === 'chairlegs_low001_chair1_0') {
           child.material = backMaterial;
-          backApplied = true;
         }
-
-        // Гарантируем правильные настройки теней
         child.castShadow = true;
         child.receiveShadow = true;
       }
     });
-
-    // Дебаг информация в development
-    {
-      console.log('🔄 Материалы применены:', {
-        legs: { material: armchairMaterial, applied: legsApplied },
-        back: { material: armchairBackMaterial, applied: backApplied },
-      });
-    }
   }, [armchairMaterial, armchairBackMaterial, legMaterialsConfig, backMaterials]);
 
-  // Эффект для визуального выделения выбранной модели
   useEffect(() => {
     if (!group.current) return;
-
     group.current.traverse((child) => {
       if (child.isMesh) {
-        // Добавляем или убираем выделение
         if (isSelected) {
-          // Можно добавить визуальное выделение (например, контур)
           child.material.emissive = new THREE.Color(0x333333);
           child.material.emissiveIntensity = 0.1;
         } else {
-          // Убираем выделение
           child.material.emissive = new THREE.Color(0x000000);
           child.material.emissiveIntensity = 0;
         }
@@ -241,17 +200,14 @@ export function Armchair(props) {
     });
   }, [isSelected]);
 
-  // Обработка ошибок загрузки модели
   useEffect(() => {
     if (!scene) {
       setError('Модель кресла не загрузилась');
-      console.error('❌ Ошибка загрузки модели armchair2.glb');
     } else {
       setError(null);
     }
   }, [scene]);
 
-  // Fallback при ошибке
   if (error) {
     return (
       <group {...props}>
@@ -293,13 +249,10 @@ export function Armchair(props) {
           castShadow
           receiveShadow
           onUpdate={(self) => {
-            // Дополнительная настройка теней для всех мешей
             self.traverse((child) => {
               if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
-
-                // Оптимизация для больших моделей
                 if (child.geometry) {
                   child.geometry.computeVertexNormals();
                 }
@@ -312,5 +265,6 @@ export function Armchair(props) {
   );
 }
 
-// Предзагрузка модели для лучшей производительности
 useGLTF.preload('./armchair2.glb');
+
+
